@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:cache="http://www.hjide.com/schema/cache"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.hjide.com/schema/cache http://www.hjide.com/schema/cache/cache.xsd
+       " default-autowire="byName">
+    <!--
+        <cache:redis id="mixCache" configId="/redis/cluster/17" token="1417623612434"/>
+    -->
+    <!--
+    <cache:jimdb id="testCache" configId="0"  jimUrl="jim://1803528671997086613/2" serviceEndpoint="http://cfs.jim.jd.local:6060"/>
+    -->
+    <!--
+    <cache:jimdb id="testCache" configId="/redis/cluster/19" token="1417632068813"/>
+    -->
+    <!--
+    <cache:jimdb id="testCache" configId="jim://1803528671997086613/2" token="jim://1803528671997086613/2"
+                 serviceEndpoint="http://cfs.jim.jd.local:6060"/>
+                 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+    <cache:redis id="mixCache" host="127.0.0.1" port="6379" maxActive="10" maxIdle="5" maxTotal="40" timeout="1000"
+                 testOnBorrow="true" testOnReturn="false"/>
+
+</beans>

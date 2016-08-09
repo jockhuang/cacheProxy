@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.hjide.com/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.hjide.com/schema/cache http://www.hjide.com/schema/cache/cache.xsd"
+       default-autowire="byName">
+
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- redis1.3版本配置文件方式 -->
+    <import resource="spring-config.xml"/>
+    <!-- redis1.4版本配置文件方式 -->
+
+
+    <bean id="redisConcurrentLock" class="com.hjide.lock.SimpleConcurrentLock">
+        <property name="acquireLock">
+            <bean class="com.hjide.lock.redis.RedisAcquireLock">
+                <!-- redis锁key失效时间 默认30秒 -->
+                <property name="expireSeconds" value="10"/>
+
+                <property name="cacheProxy" ref="mixCache"/>
+                <!--<property name="cacheProxy" ref="annotationCache1.3"/>-->
+                <!--<property name="cacheProxy" ref="annotationCache1.4.5"/>-->
+                <!--<property name="cacheProxy" ref="configCache1.4.5"/>-->
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 注解方式 -->
+    <cache:lock id="cacheLock" cacheProxy="mixCache" checkExpireNum="10" expireSeconds="30"/>
+
+</beans>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.hjide.com/schema/cache"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://www.hjide.com/schema/cache"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:element name="redis">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[ jedis ]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <!-- 继承定义 从namespace="http://www.springframework.org/schema/beans" -->
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="host" type="xsd:string" use="required"/>
+                    <xsd:attribute name="port" type="xsd:string" use="required"/>
+                    <xsd:attribute name="password" type="xsd:string" use="optional"/>
+                    <xsd:attribute name="maxTotal" type="xsd:string" use="optional" default="1024"/>
+                    <xsd:attribute name="maxActive" type="xsd:string" use="optional" default="1024"/>
+                    <xsd:attribute name="maxIdle" type="xsd:string" use="optional" default="5"/>
+                    <xsd:attribute name="maxWait" type="xsd:string" use="optional" default="100"/>
+                    <xsd:attribute name="timeout" type="xsd:string" use="optional" default="1000"/>
+                    <xsd:attribute name="testOnBorrow" type="xsd:string" use="optional" default="false"/>
+                    <xsd:attribute name="testOnReturn" type="xsd:string" use="optional" default="false"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="lock">
+        <xsd:annotation>
+            <xsd:documentation>Concurrent lock by redis</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="cacheProxy" type="xsd:string" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[ 锁需要的缓存代理bean,不可为空 ]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="expireSeconds" type="xsd:string"
+                                   use="optional" default="30">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[ 缓存锁失效时间;默认为30秒 ]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="checkExpireNum" type="xsd:string"
+                                   use="optional" default="10">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[ 校验并设置锁失效时间次数，防止锁在异常异常情况不释放;
+                            默认为10次；表示锁在有效期内，被重复获取锁的次数； ]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
