@@ -13,20 +13,19 @@
                 <!-- 继承定义 从namespace="http://www.springframework.org/schema/beans" -->
                 <xsd:extension base="beans:identifiedType">
                     <xsd:attribute name="host" type="xsd:string" use="required"/>
-                    <xsd:attribute name="port" type="xsd:string" use="required"/>
+                    <xsd:attribute name="port" type="xsd:int" use="optional" default="6379"/>
                     <xsd:attribute name="password" type="xsd:string" use="optional"/>
-                    <xsd:attribute name="maxTotal" type="xsd:string" use="optional" default="1024"/>
-                    <xsd:attribute name="maxActive" type="xsd:string" use="optional" default="1024"/>
-                    <xsd:attribute name="maxIdle" type="xsd:string" use="optional" default="5"/>
-                    <xsd:attribute name="maxWait" type="xsd:string" use="optional" default="100"/>
-                    <xsd:attribute name="timeout" type="xsd:string" use="optional" default="1000"/>
-                    <xsd:attribute name="testOnBorrow" type="xsd:string" use="optional" default="false"/>
-                    <xsd:attribute name="testOnReturn" type="xsd:string" use="optional" default="false"/>
+                    <xsd:attribute name="maxTotal" type="xsd:int" use="optional" default="1024"/>
+                    <xsd:attribute name="minIdle" type="xsd:int" use="optional" default="1"/>
+                    <xsd:attribute name="maxIdle" type="xsd:int" use="optional" default="5"/>
+                    <xsd:attribute name="maxWait" type="xsd:int" use="optional" default="100"/>
+                    <xsd:attribute name="timeout" type="xsd:int" use="optional" default="1000"/>
+                    <xsd:attribute name="testOnBorrow" type="xsd:boolean" use="optional" default="false"/>
+                    <xsd:attribute name="testOnReturn" type="xsd:boolean" use="optional" default="false"/>
                 </xsd:extension>
             </xsd:complexContent>
         </xsd:complexType>
     </xsd:element>
-
     <xsd:element name="lock">
         <xsd:annotation>
             <xsd:documentation>Concurrent lock by redis</xsd:documentation>

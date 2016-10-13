@@ -37,13 +37,21 @@ public class RedisCacheDefinitionParser extends AbstractSimpleBeanDefinitionPars
         String host = element.getAttribute("host");
         String port = element.getAttribute("port");
         String password = element.getAttribute("password");
-
+        String timeout = element.getAttribute("timeout");
 //        builder.addPropertyValue("host", host);
 //        builder.addPropertyValue("port", port);
         builder.setDestroyMethodName("destroy");
         builder.addConstructorArgValue(createJedisPoolConfigBeanDefinition(element));
         builder.addConstructorArgValue(host);
-        builder.addConstructorArgValue(port);
+        if (port != null && port.length() > 0)
+            builder.addConstructorArgValue(port);
+        if (timeout != null && timeout.length() > 0)
+            builder.addConstructorArgValue(timeout);
+        else
+            builder.addConstructorArgValue(3000);
+        if (password != null && password.length() > 0)
+            builder.addConstructorArgValue(password);
+
         return builder.getBeanDefinition();
     }
 
@@ -51,19 +59,25 @@ public class RedisCacheDefinitionParser extends AbstractSimpleBeanDefinitionPars
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(JedisPoolConfig.class);
         // 从标签中取出对应的属性值
         String maxTotal = element.getAttribute("maxTotal");
-        String maxActive = element.getAttribute("maxActive");
         String maxIdle = element.getAttribute("maxIdle");
+        String minIdle = element.getAttribute("minIdle");
         String testOnBorrow = element.getAttribute("testOnBorrow");
         String testOnReturn = element.getAttribute("testOnReturn");
         String maxWaitMillis = element.getAttribute("timeout");
 
+        if (maxTotal != null && maxTotal.length() > 0)
+            builder.addPropertyValue("maxTotal", maxTotal);
+        if (maxIdle != null && maxIdle.length() > 0)
+            builder.addPropertyValue("maxIdle", maxIdle);
+        if (minIdle != null && minIdle.length() > 0)
+            builder.addPropertyValue("minIdle", minIdle);
+        if (testOnBorrow != null && testOnBorrow.length() > 0)
+            builder.addPropertyValue("testOnBorrow", testOnBorrow);
+        if (testOnReturn != null && testOnReturn.length() > 0)
+            builder.addPropertyValue("testOnReturn", testOnReturn);
+        if (maxWaitMillis != null && maxWaitMillis.length() > 0)
+            builder.addPropertyValue("maxWaitMillis", maxWaitMillis);
 
-//        builder.addPropertyValue("maxActive", maxActive);
-        builder.addPropertyValue("maxIdle", maxIdle);
-        builder.addPropertyValue("testOnBorrow",testOnBorrow);
-        builder.addPropertyValue("testOnReturn",testOnReturn);
-        builder.addPropertyValue("maxWaitMillis",maxWaitMillis);
-        builder.addPropertyValue("maxTotal",maxTotal);
         return builder.getBeanDefinition();
     }
 

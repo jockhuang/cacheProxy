@@ -27,7 +27,7 @@
             </list>
         </property>
     </bean>
-    <cache:redis id="mixCache" host="127.0.0.1" port="6379" maxActive="10" maxIdle="5" maxTotal="40" timeout="1000"
-                 testOnBorrow="true" testOnReturn="false"/>
+    <cache:redis id="mixCache" host="127.0.0.1" />
+    <!--<cache:memcached id="mcache" host="127.0.0.1" port="12000"/>-->
 
 </beans>
