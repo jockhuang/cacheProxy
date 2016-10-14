@@ -170,7 +170,7 @@ public class MultiClientCacheImpl implements CacheProxy, InitializingBean {
     }
 
     @Override
-    public void set(String key, Object value, TimeUnit unit, int expiredTime) {
+    public void setObject(String key, Object value, TimeUnit unit, int expiredTime) {
         throw new CacheException(ErrorCode.parameter_error, "not support operate;");
     }
 

@@ -533,7 +533,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy {
     @Override
     public boolean setnx(String key, TimeUnit unit, int expiredTime, String value) {
         Jedis jdRedisClient = getJdRedisClient().getResource();
-        String s = jdRedisClient.set(key, value,"nx","ex",unit.convert(expiredTime,unit)) ;
+        String s = jdRedisClient.set(key, value,"nx","ex",unit.toSeconds(expiredTime)) ;
         getJdRedisClient().returnResource(jdRedisClient);
         return "OK".equals(s);
     }
@@ -548,7 +548,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy {
             else
                 return toObject(data);
         } catch (Exception ex) {
-            throw new RuntimeException("get error." + ex.getMessage());
+            throw new RuntimeException("getObject error." + ex.getMessage());
         }finally {
             getJdRedisClient().returnResource(jdRedisClient);
         }
@@ -561,7 +561,21 @@ public class RedisCacheCloudImpl implements CacheClientProxy {
         try {
             jdRedisClient.set(key.getBytes(), toByteArray(value));
         } catch (Exception ex) {
-            throw new RuntimeException("set error." + ex.getMessage());
+            throw new RuntimeException("setObject error." + ex.getMessage());
+        }finally {
+            getJdRedisClient().returnResource(jdRedisClient);
+        }
+
+    }
+
+    @Override
+    public void setObject(String key, TimeUnit unit, int expiredTime, Object value) {
+        Jedis jdRedisClient = getJdRedisClient().getResource();
+        try {
+            jdRedisClient.del(key);
+            jdRedisClient.set(key.getBytes(), toByteArray(value),"nx".getBytes(),"px".getBytes(),unit.toMillis(expiredTime));
+        } catch (Exception ex) {
+            throw new RuntimeException("setObject error." + ex.getMessage());
         }finally {
             getJdRedisClient().returnResource(jdRedisClient);
         }

@@ -9,7 +9,7 @@ public interface ObjectCacheProxy {
 
 
     @Deprecated
-    public void set(String key, Object value, TimeUnit unit, int expiredTime);
+    public void setObject(String key, Object value, TimeUnit unit, int expiredTime);
 
     public Object getObject(String key);
 

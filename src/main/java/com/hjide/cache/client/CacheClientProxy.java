@@ -57,6 +57,8 @@ public interface CacheClientProxy {
 
     public void setObject(String key, Object value);
 
+    public void setObject(String key, TimeUnit unit, int expiredTime,Object value);
+
     //list接口
     Long rpush(String key, String... value);
 

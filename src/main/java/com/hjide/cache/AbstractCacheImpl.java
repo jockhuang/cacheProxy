@@ -195,8 +195,8 @@ public abstract class AbstractCacheImpl
 
     @Deprecated
     @Override
-    public void set(String key, Object value, TimeUnit unit, int expiredTime) {
-        throw new RuntimeException("not support operate");
+    public void setObject(String key, Object value, TimeUnit unit, int expiredTime) {
+        getClientProxy().setObject(key,unit,expiredTime,value);
     }
 
     @Override

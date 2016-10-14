@@ -1,6 +1,7 @@
 package com.hjide.cache.test;
 
 import com.hjide.cache.CacheProxy;
+import com.hjide.cache.serialize.CategoryDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,6 +22,7 @@ public class CacheTest extends BaseTest {
         cacheProxy.sadd("key","values");
         cacheProxy.scard("key");
         cacheProxy.spop("key");
+
         Assert.assertEquals("testvalue", cacheProxy.get("test"));
         System.out.println(cacheProxy.get("test"));
     }
@@ -50,5 +52,14 @@ public class CacheTest extends BaseTest {
         System.out.println(cacheProxy.get("a"));
     }
 
+    @Test
+    public void objectTest(){
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setId(1L);
+        cacheProxy.setObject("key",categoryDTO,TimeUnit.MINUTES,1);
+
+        CategoryDTO cache = (CategoryDTO)cacheProxy.getObject("key");
+        Assert.assertEquals(1L,cache.getId().longValue());
+    }
 
 }
