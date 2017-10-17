@@ -5,7 +5,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by xuxianjun on 2016/1/12.
  */
-public interface StringCacheProxy {
+public interface StringCacheProxy
+{
 
     //String相关方法
     public void set(String key, String value);

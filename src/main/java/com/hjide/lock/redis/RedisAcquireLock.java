@@ -15,13 +15,13 @@ import java.util.concurrent.TimeUnit;
  * Time: 下午8:40
  * To change this template use File | Settings | File Templates.
  */
-public class RedisAcquireLock implements AcquireLock<String> {
+public class RedisAcquireLock implements AcquireLock<String>
+{
 
     /**
      * 默认redis key超时30秒
      */
     private final static int DEFAULT_EXPIRE_SECONDS = 30;
-
 
     private final static long DEFAULT_CHECK_EXPIRE_NUM = 5;
 
@@ -38,7 +38,8 @@ public class RedisAcquireLock implements AcquireLock<String> {
 
     protected CacheProxy cacheProxy;
 
-    public RedisAcquireLock() {
+    public RedisAcquireLock()
+    {
         expireSeconds = DEFAULT_EXPIRE_SECONDS;
         checkExpireNum = DEFAULT_CHECK_EXPIRE_NUM;
     }
@@ -50,41 +51,53 @@ public class RedisAcquireLock implements AcquireLock<String> {
      * @return
      * @throws {@link ConcurrentLockException}
      */
-    public LockResult lock(LockKeyClient lockKey) throws ConcurrentLockException {
-        if (StringUtils.isBlank(lockKey.getLockKey())) {
+    public LockResult lock(LockKeyClient lockKey)
+        throws ConcurrentLockException
+    {
+        if (StringUtils.isBlank(lockKey.getLockKey()))
+        {
             throw new IllegalArgumentException("lockKey为空!");
         }
 
-        if (cacheProxy == null) {
+        if (cacheProxy == null)
+        {
             throw new IllegalArgumentException("redis配置为空!");
         }
 
         LockResult<String> result = new LockResult<String>();
-        try {
+        try
+        {
 
             long time = cacheProxy.incr(lockKey.getLockKey());
             //获取到锁
-            if (time == 1) {
+            if (time == 1)
+            {
                 result.setSuccess(true);
                 return result;
             }
             checkExpire(lockKey, time);
-        } finally {
-            if (result.isSuccess()) {
+        }
+        finally
+        {
+            if (result.isSuccess())
+            {
                 expire(lockKey);
             }
         }
         return result;
     }
 
-    private void checkExpire(LockKeyClient lockKey, long time) {
+    private void checkExpire(LockKeyClient lockKey, long time)
+    {
         long checkExpireTime = this.checkExpireNum;
-        if (lockKey.getCheckExpireNum() > 0) {
+        if (lockKey.getCheckExpireNum() > 0)
+        {
             checkExpireTime = lockKey.getCheckExpireNum();
         }
 
         if (time > checkExpireTime
-                && cacheProxy.ttl(lockKey.getLockKey()) < 0) {
+            && cacheProxy.ttl(lockKey.getLockKey()) < 0)
+        {
             expire(lockKey);
         }
 
@@ -95,9 +108,11 @@ public class RedisAcquireLock implements AcquireLock<String> {
      *
      * @param lockKey
      */
-    private void expire(LockKeyClient lockKey) {
+    private void expire(LockKeyClient lockKey)
+    {
         int expire = this.expireSeconds;
-        if (lockKey.getExpireSecond() > 0) {
+        if (lockKey.getExpireSecond() > 0)
+        {
             expire = lockKey.getExpireSecond();
         }
         cacheProxy.expire(lockKey.getLockKey(), expire, TimeUnit.SECONDS);
@@ -110,25 +125,33 @@ public class RedisAcquireLock implements AcquireLock<String> {
      * @return
      * @throws ConcurrentLockException
      */
-    public LockResult lock(LockKeyClient lockKey, long timeout, TimeUnit unit) throws ConcurrentLockException {
-        if (StringUtils.isBlank(lockKey.getLockKey())) {
+    public LockResult lock(LockKeyClient lockKey, long timeout, TimeUnit unit)
+        throws ConcurrentLockException
+    {
+        if (StringUtils.isBlank(lockKey.getLockKey()))
+        {
             throw new IllegalArgumentException("lockKey为空!");
         }
-        if (cacheProxy == null) {
+        if (cacheProxy == null)
+        {
             throw new IllegalArgumentException("redis配置为空!");
         }
         //第一次锁失败
         LockResult result = lock(lockKey);
-        if (result.isSuccess()) {
+        if (result.isSuccess())
+        {
             return result;
         }
         //等待锁被是否被释放
         long time = unit.toMillis(timeout);
         long lastTime = System.currentTimeMillis();
-        try {
+        try
+        {
             //只有获取锁成功或等待时间过长
-            while (!result.isSuccess() && time > 0) {
-                if (waitLock(time, lockKey.getLockKey())) {
+            while (!result.isSuccess() && time > 0)
+            {
+                if (waitLock(time, lockKey.getLockKey()))
+                {
                     result = lock(lockKey);
                 }
                 //计算等待时间
@@ -136,9 +159,13 @@ public class RedisAcquireLock implements AcquireLock<String> {
                 time -= now - lastTime;
                 lastTime = now;
             }
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             throw new ConcurrentLockException("任务获取redis锁中断异常:", e);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new ConcurrentLockException("任务获取redis锁异常:", e);
         }
         return result;
@@ -149,18 +176,24 @@ public class RedisAcquireLock implements AcquireLock<String> {
      * @param lockKey
      * @return true表示锁已释放
      */
-    boolean waitLock(long waitTime, String lockKey) throws InterruptedException {
+    boolean waitLock(long waitTime, String lockKey)
+        throws InterruptedException
+    {
         long lastTime = System.currentTimeMillis();
-        try {
-            while (true) {
+        try
+        {
+            while (true)
+            {
 
-                if (waitTime <= 0) {
+                if (waitTime <= 0)
+                {
                     return false;
                 }
                 //单次等待
                 Thread.sleep(50);
                 //判断redis锁是否还占用
-                if (!cacheProxy.exists(lockKey)) {
+                if (!cacheProxy.exists(lockKey))
+                {
                     return true;
                 }
                 //等待时间计算
@@ -171,42 +204,53 @@ public class RedisAcquireLock implements AcquireLock<String> {
                 if (Thread.interrupted())
                     break;
             }
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e)
+        {
             throw e;
         }
         throw new InterruptedException();
     }
 
-    public boolean unLock(String lockKey) {
+    public boolean unLock(String lockKey)
+    {
         return cacheProxy.del(lockKey) > 0;
     }
 
-
-    public void setExpireSeconds(int expireSeconds) {
-        this.expireSeconds = expireSeconds;
-    }
-
-    public void setCheckExpireNum(long checkExpireNum) {
-        if (checkExpireNum > 0) {
-            this.checkExpireNum = checkExpireNum;
-        } else {
-            throw new IllegalArgumentException("checkExpireNum参数设置异常,必须大于0！");
-        }
-    }
-
-    public void setCacheProxy(CacheProxy cacheProxy) {
-        this.cacheProxy = cacheProxy;
-    }
-
-    public CacheProxy getCacheProxy() {
+    public CacheProxy getCacheProxy()
+    {
         return cacheProxy;
     }
 
-    public int getExpireSeconds() {
+    public void setCacheProxy(CacheProxy cacheProxy)
+    {
+        this.cacheProxy = cacheProxy;
+    }
+
+    public int getExpireSeconds()
+    {
         return expireSeconds;
     }
 
-    public long getCheckExpireNum() {
+    public void setExpireSeconds(int expireSeconds)
+    {
+        this.expireSeconds = expireSeconds;
+    }
+
+    public long getCheckExpireNum()
+    {
         return checkExpireNum;
+    }
+
+    public void setCheckExpireNum(long checkExpireNum)
+    {
+        if (checkExpireNum > 0)
+        {
+            this.checkExpireNum = checkExpireNum;
+        }
+        else
+        {
+            throw new IllegalArgumentException("checkExpireNum参数设置异常,必须大于0！");
+        }
     }
 }

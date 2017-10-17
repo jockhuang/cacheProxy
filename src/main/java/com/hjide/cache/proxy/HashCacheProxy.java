@@ -6,7 +6,8 @@ import java.util.Map;
 /**
  * Created by xuxianjun on 2016/1/12.
  */
-public interface HashCacheProxy {
+public interface HashCacheProxy
+{
 
     //has相关方法
     public boolean hset(String key, String field, String value);

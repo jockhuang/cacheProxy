@@ -10,6 +10,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Serialize {
+public @interface Serialize
+{
     String name() default "";
 }

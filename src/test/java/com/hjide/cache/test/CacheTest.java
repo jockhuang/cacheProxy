@@ -4,6 +4,7 @@ import com.hjide.cache.CacheProxy;
 import com.hjide.cache.serialize.CategoryDTO;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -11,9 +12,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by jock on 15/12/24.
  */
+@Component
 public class CacheTest extends BaseTest {
 
-    @Resource(name = "mixCache")
+    @Resource(name="mixCache")
     private CacheProxy cacheProxy;
 
     @Test

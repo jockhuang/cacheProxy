@@ -25,26 +25,32 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 上午11:19
  * To change this template use File | Settings | File Templates.
  */
-public class SerializeBean {
+public class SerializeBean
+{
+    protected static Map<Class, List<SerializeField>> serializeFieldMap =
+        new ConcurrentHashMap<Class, List<SerializeField>>();
+
     private static Log log = LogFactory.getLog("SerializeBean");
 
-
-    protected static Map<Class, List<SerializeField>> serializeFieldMap = new ConcurrentHashMap<Class, List<SerializeField>>();
-
-
-    public static List<SerializeField> getSerializeField(Class clazz) throws IntrospectionException {
+    public static List<SerializeField> getSerializeField(Class clazz)
+        throws IntrospectionException
+    {
         List<SerializeField> fieldList = serializeFieldMap.get(clazz);
-        if (fieldList == null) {
+        if (fieldList == null)
+        {
             fieldList = new ArrayList<SerializeField>();
             List<Field> fields = getAllField(clazz);
-            for (Field field : fields) {
-                if (isNeed(field)) {
+            for (Field field : fields)
+            {
+                if (isNeed(field))
+                {
                     SerializeField serializeField = new SerializeField();
 
                     // 获取序列换字段名：默认取自定义，否则取属性名称
                     Serialize serialize = field.getAnnotation(Serialize.class);
                     String fieldName = serialize.name();
-                    if (StringUtils.isBlank(fieldName)) {
+                    if (StringUtils.isBlank(fieldName))
+                    {
                         fieldName = field.getName();
                     }
                     serializeField.field = field;
@@ -59,20 +65,22 @@ public class SerializeBean {
         return fieldList;
     }
 
-    private static List<Field> getAllField(Class clazz) {
+    private static List<Field> getAllField(Class clazz)
+    {
         List<Field> fieldList = new ArrayList<Field>();
         Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
+        for (Field field : fields)
+        {
             fieldList.add(field);
         }
         Class superClazz = clazz.getSuperclass();
-        if (superClazz == null) {
+        if (superClazz == null)
+        {
             return fieldList;
         }
         fieldList.addAll(getAllField(superClazz));
         return fieldList;
     }
-
 
     /**
      * 序列化对象
@@ -80,20 +88,24 @@ public class SerializeBean {
      * @param bean
      * @return
      */
-    public static Map<String, String> serializeObj(Object bean) {
-        try {
+    public static Map<String, String> serializeObj(Object bean)
+    {
+        try
+        {
             Map<String, String> fieldMap = new HashMap<String, String>();
             List<SerializeField> fields = getSerializeField(bean.getClass());
-            for (SerializeField serializeField : fields) {
+            for (SerializeField serializeField : fields)
+            {
                 serializeField.putToMap(bean, fieldMap);
             }
             return fieldMap;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("序列化对象异常：" + e);
         }
         return null;
     }
-
 
     /**
      * 反序列化对象
@@ -102,18 +114,24 @@ public class SerializeBean {
      * @param obj
      * @return
      */
-    public static Object deserialization(Object bean, Map<String, String> obj) {
-        try {
-            if (obj == null || obj.isEmpty()) {
+    public static Object deserialization(Object bean, Map<String, String> obj)
+    {
+        try
+        {
+            if (obj == null || obj.isEmpty())
+            {
                 return null;
             }
 
             List<SerializeField> fields = getSerializeField(bean.getClass());
-            for (SerializeField serializeField : fields) {
+            for (SerializeField serializeField : fields)
+            {
 
                 serializeField.writeToBean(bean, obj);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("反序列化对象异常" + e);
         }
         return bean;
@@ -125,64 +143,86 @@ public class SerializeBean {
      * @param field
      * @return
      */
-    private static boolean isNeed(Field field) {
+    private static boolean isNeed(Field field)
+    {
         Type primitive = Type.isPrimitive(field.getType());
-        if (primitive == null) {
+        if (primitive == null)
+        {
             return false;
         }
-        if (field.getName() == null) {
+        if (field.getName() == null)
+        {
             return false;
         }
-        if (!field.isAnnotationPresent(Serialize.class)) {
+        if (!field.isAnnotationPresent(Serialize.class))
+        {
             return false;
         }
-        if (Modifier.isStatic(field.getModifiers())) {
+        if (Modifier.isStatic(field.getModifiers()))
+        {
             return false;
         }
         return true;
     }
 
-    public static class SerializeField {
+    public static class SerializeField
+    {
         public Field field;
+
         public PropertyDescriptor propertyDescriptor;
+
         public String serializeName;
+
         public Type type;
 
-        void putToMap(Object bean, Map<String, String> fieldMap) {
+        void putToMap(Object bean, Map<String, String> fieldMap)
+        {
             Method readMethod = propertyDescriptor.getReadMethod();
-            if (readMethod == null) {
+            if (readMethod == null)
+            {
                 return;
             }
-            try {
+            try
+            {
                 Object value = readMethod.invoke(bean);
-                if (value == null) {
+                if (value == null)
+                {
                     return;
                 }
                 String stringValue = type.getString(value);
-                if (stringValue != null) {
+                if (stringValue != null)
+                {
                     fieldMap.put(serializeName, stringValue);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error("读取bean属性值异常,类名=" + bean.getClass().getName() +
-                        ",属性名:" + propertyDescriptor.getName(), e);
+                    ",属性名:" + propertyDescriptor.getName(), e);
             }
 
         }
 
-        void writeToBean(Object bean, Map<String, String> fieldMap) {
+        void writeToBean(Object bean, Map<String, String> fieldMap)
+        {
 
             Method writeMethod = propertyDescriptor.getWriteMethod();
-            if (writeMethod == null) {
+            if (writeMethod == null)
+            {
                 return;
             }
-            try {
+            try
+            {
                 Object value = type.
-                        getValue(fieldMap.get(serializeName));
-                if (value == null) {
+                    getValue(fieldMap.get(serializeName));
+                if (value == null)
+                {
                     return;
                 }
                 writeMethod.invoke(bean, value);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error(propertyDescriptor.getName() + "=" + fieldMap.get(propertyDescriptor.getName()), e);
             }
         }

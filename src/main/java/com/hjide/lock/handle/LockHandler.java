@@ -8,7 +8,8 @@ package com.hjide.lock.handle;
  * Time: 下午2:57
  * To change this template use File | Settings | File Templates.
  */
-public interface LockHandler<T> extends LockKeyClient {
+public interface LockHandler<T> extends LockKeyClient
+{
 
     /**
      * 在锁中处理方法
@@ -16,7 +17,5 @@ public interface LockHandler<T> extends LockKeyClient {
      * @return
      */
     public T handleInLock();
-
-
 
 }

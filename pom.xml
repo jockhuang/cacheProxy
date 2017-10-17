@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jd.pop</groupId>
+    <groupId>com.hjide</groupId>
     <artifactId>cache</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
@@ -12,8 +12,8 @@
     <properties>
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
         <maven.compiler.encoding>utf-8</maven.compiler.encoding>
-        <spring.version>3.1.4.RELEASE</spring.version>
-        <jedis.version>2.6.2</jedis.version>
+        <spring.version>3.2.8.RELEASE</spring.version>
+        <jedis.version>2.9.0</jedis.version>
     </properties>
     <dependencies>
         <dependency>
@@ -23,10 +23,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.spy</groupId>
-            <artifactId>spymemcached</artifactId>
-            <version>2.9.1</version>
-            <scope>provided</scope>
+            <groupId>biz.paluch.redis</groupId>
+            <artifactId>lettuce</artifactId>
+            <version>4.4.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -67,13 +66,13 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.1.15</version>
+            <version>1.2.38</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>

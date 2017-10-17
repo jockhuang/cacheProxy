@@ -9,15 +9,18 @@ import java.util.Map;
 /**
  * Created by xuxianjun on 2016/1/20.
  */
-public class MapType extends Type<Map>{
+public class MapType extends Type<Map>
+{
 
     @Override
-    public Map getValue(String value) {
+    public Map getValue(String value)
+    {
         return JSON.parseObject(value, HashMap.class);
     }
 
     @Override
-    public String getString(Object value) {
+    public String getString(Object value)
+    {
         return JSON.toJSONString(value, SerializerFeature.WriteClassName);
     }
 }

@@ -13,7 +13,8 @@ import java.util.concurrent.TimeUnit;
  * date: 2015/1/9
  * time: 17:07
  */
-public interface CacheClientProxy {
+public interface CacheClientProxy
+{
 
     //key方法
     public Long del(String key);
@@ -57,7 +58,7 @@ public interface CacheClientProxy {
 
     public void setObject(String key, Object value);
 
-    public void setObject(String key, TimeUnit unit, int expiredTime,Object value);
+    public void setObject(String key, TimeUnit unit, int expiredTime, Object value);
 
     //list接口
     Long rpush(String key, String... value);
@@ -80,9 +81,9 @@ public interface CacheClientProxy {
 
     String rpop(String key);
 
-    Long lpushx(String key, String value);
+    Long lpushx(String key, String ...value);
 
-    Long rpushx(String key, String value);
+    Long rpushx(String key, String ...value);
 
     //map方法
     boolean hset(String key, String field, String value);
@@ -168,6 +169,5 @@ public interface CacheClientProxy {
     Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count);
 
     Long zremrangeByScore(String key, double min, double max);
-
 
 }

@@ -1,16 +1,6 @@
 package com.hjide.cache.utils.type;
 
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,17 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * 作 者： chenchuan
  * 创建时间：2014-4-10
  */
-public abstract class Type<T> {
+public abstract class Type<T>
+{
     protected static Map<Class, Type> primitiveType = new HashMap<Class, Type>();
 
     protected static Map<Class, Type> collectionType = new HashMap<Class, Type>();
 
-    public abstract T getValue(String value);
-
-    public abstract String getString(Object value);
-
-
-    static {
+    static
+    {
 
         primitiveType.put(Long.class, new LongType());
         primitiveType.put(Integer.class, new IntegerType());
@@ -59,8 +46,10 @@ public abstract class Type<T> {
 
     }
 
-    public static Type isPrimitive(Class clazz) {
-        if (clazz != null ) {
+    public static Type isPrimitive(Class clazz)
+    {
+        if (clazz != null)
+        {
             return primitiveType.get(clazz);
         }
 //        Iterator<Map.Entry<Class, Type>> iterator = collectionType.entrySet().iterator();
@@ -73,7 +62,8 @@ public abstract class Type<T> {
         return null;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println(isPrimitive(ArrayList.class));
         System.out.println(isPrimitive(List.class));
         System.out.println(isPrimitive(HashMap.class));
@@ -81,7 +71,7 @@ public abstract class Type<T> {
         System.out.println(isPrimitive(ConcurrentHashMap.class));
 
         System.out.println("=========set===========");
-        Set<Long > set = new LinkedHashSet<Long>();
+        Set<Long> set = new LinkedHashSet<Long>();
         set.add(1L);
         set.add(4L);
         set.add(5L);
@@ -95,7 +85,7 @@ public abstract class Type<T> {
 
         System.out.println("=========list===========");
 
-        List<Integer > list = new LinkedList<Integer>();
+        List<Integer> list = new LinkedList<Integer>();
         list.add(1);
         list.add(4);
         list.add(5);
@@ -104,21 +94,25 @@ public abstract class Type<T> {
         ListType listType = new ListType();
         json = setType.getString(list);
         System.out.println(json);
-        List<Integer > jsonList = listType.getValue(json);
+        List<Integer> jsonList = listType.getValue(json);
         System.out.println(jsonList);
 
         System.out.println("=========map===========");
-        Map<String,String > map = new Hashtable<String, String>();
-        map.put("1","1");
-        map.put("4","2");
-        map.put("5","5");
-        map.put("6","6");
-        map.put("7","7");
+        Map<String, String> map = new Hashtable<String, String>();
+        map.put("1", "1");
+        map.put("4", "2");
+        map.put("5", "5");
+        map.put("6", "6");
+        map.put("7", "7");
         MapType mapType = new MapType();
         json = mapType.getString(map);
         System.out.println(json);
-        Map<String,String > jsonMap = mapType.getValue(json);
+        Map<String, String> jsonMap = mapType.getValue(json);
         System.out.println(jsonMap);
     }
+
+    public abstract T getValue(String value);
+
+    public abstract String getString(Object value);
 
 }

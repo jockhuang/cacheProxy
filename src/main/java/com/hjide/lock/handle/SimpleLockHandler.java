@@ -6,8 +6,8 @@ package com.hjide.lock.handle;
  * <p/>
  * Created by xuxianjun on 2015/7/8.
  */
-public abstract class SimpleLockHandler<T> implements LockHandler<T> {
-
+public abstract class SimpleLockHandler<T> implements LockHandler<T>
+{
 
     /**
      * 获取锁key
@@ -16,7 +16,8 @@ public abstract class SimpleLockHandler<T> implements LockHandler<T> {
      */
     public abstract String getLockKey();
 
-    public int getExpireSecond() {
+    public int getExpireSecond()
+    {
         return 30;
     }
 
@@ -25,7 +26,8 @@ public abstract class SimpleLockHandler<T> implements LockHandler<T> {
      *
      * @return
      */
-    public long getCheckExpireNum() {
+    public long getCheckExpireNum()
+    {
         return 10;
     }
 

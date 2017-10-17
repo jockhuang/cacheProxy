@@ -1,6 +1,5 @@
 package com.hjide.lock;
 
-
 import com.hjide.lock.exception.ConcurrentLockException;
 import com.hjide.lock.handle.LockKeyClient;
 
@@ -14,8 +13,8 @@ import java.util.concurrent.TimeUnit;
  * Time: 下午3:14
  * To change this template use File | Settings | File Templates.
  */
-public interface AcquireLock<K> {
-
+public interface AcquireLock<K>
+{
 
     /**
      * 获取执行锁
@@ -24,7 +23,8 @@ public interface AcquireLock<K> {
      * @return
      * @throws {@link ConcurrentLockException} 当获取锁中
      */
-    LockResult lock(LockKeyClient lockKey) throws ConcurrentLockException;
+    LockResult lock(LockKeyClient lockKey)
+        throws ConcurrentLockException;
 
     /**
      * 获取执行锁
@@ -35,7 +35,8 @@ public interface AcquireLock<K> {
      * @return
      * @throws {@link ConcurrentLockException} 当获取锁中
      */
-    LockResult lock(LockKeyClient lockKey, long timeout, TimeUnit timeUnit) throws ConcurrentLockException;
+    LockResult lock(LockKeyClient lockKey, long timeout, TimeUnit timeUnit)
+        throws ConcurrentLockException;
 
     /**
      * 释放锁
@@ -45,26 +46,30 @@ public interface AcquireLock<K> {
      */
     boolean unLock(K lockKey);
 
-    public static class LockResult<R> {
+    public static class LockResult<R>
+    {
 
         private boolean success = false;
 
         private R lockInfo;
 
-
-        public boolean isSuccess() {
+        public boolean isSuccess()
+        {
             return success;
         }
 
-        public void setSuccess(boolean success) {
+        public void setSuccess(boolean success)
+        {
             this.success = success;
         }
 
-        public R getLockInfo() {
+        public R getLockInfo()
+        {
             return lockInfo;
         }
 
-        public void setLockInfo(R lockInfo) {
+        public void setLockInfo(R lockInfo)
+        {
             this.lockInfo = lockInfo;
         }
     }

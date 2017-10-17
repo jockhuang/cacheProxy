@@ -3,7 +3,8 @@ package com.hjide.lock.handle;
 /**
  * Created by xuxianjun on 2016/1/25.
  */
-public interface LockKeyClient {
+public interface LockKeyClient
+{
     /**
      * 获取锁key
      *

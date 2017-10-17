@@ -8,15 +8,18 @@ import java.util.List;
 /**
  * Created by xuxianjun on 2016/1/20.
  */
-public class ListType extends Type<List> {
+public class ListType extends Type<List>
+{
 
     @Override
-    public List getValue(String value) {
+    public List getValue(String value)
+    {
         return JSON.parseObject(value, List.class);
     }
 
     @Override
-    public String getString(Object value) {
+    public String getString(Object value)
+    {
         return JSON.toJSONString(value, SerializerFeature.WriteClassName);
     }
 }

@@ -5,7 +5,8 @@ import java.util.Set;
 /**
  * Created by xuxianjun on 2016/1/12.
  */
-public interface SetCacheProxy {
+public interface SetCacheProxy
+{
 
     Long sadd(String key, String... values);
 

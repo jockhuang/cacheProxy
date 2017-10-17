@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by xuxianjun on 2016/1/12.
  */
-public interface ObjectCacheProxy {
-
+public interface ObjectCacheProxy
+{
 
     @Deprecated
     public void setObject(String key, Object value, TimeUnit unit, int expiredTime);

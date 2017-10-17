@@ -11,17 +11,21 @@ import java.util.Date;
  * Time: 下午6:13
  * To change this template use File | Settings | File Templates.
  */
-public class DateType extends Type<Date> {
-    public Date getValue(String value) {
-        if (StringUtils.isBlank(value)) {
+public class DateType extends Type<Date>
+{
+    public Date getValue(String value)
+    {
+        if (StringUtils.isBlank(value))
+        {
             return null;
         }
         Date date = new Date(Long.parseLong(value));
         return date;
     }
 
-    public String getString(Object o) {
-        Date date = (Date) o;
+    public String getString(Object o)
+    {
+        Date date = (Date)o;
         return String.valueOf(date.getTime());
     }
 }
