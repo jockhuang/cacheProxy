@@ -13,7 +13,7 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * Created by jock on 15/12/24.
  */
-public class RedisCacheDefinitionParser extends AbstractSimpleBeanDefinitionParser
+public class JedisCacheDefinitionParser extends AbstractSimpleBeanDefinitionParser
 {
 
     /**

@@ -10,10 +10,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * redis并发锁
  * <p/>
- * User: xuxianjun
- * Date: 14-11-20
- * Time: 下午2:34
- * To change this template use File | Settings | File Templates.
  */
 public class SimpleConcurrentLock<T> implements ConcurrentLock<T, String>
 {

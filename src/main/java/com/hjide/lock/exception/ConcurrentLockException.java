@@ -3,10 +3,6 @@ package com.hjide.lock.exception;
 /**
  * 获取锁失败后，抛出异常
  * <p>
- * User: xuxianjun
- * Date: 14-11-20
- * Time: 下午3:16
- * To change this template use File | Settings | File Templates.
  */
 public class ConcurrentLockException extends Exception
 {

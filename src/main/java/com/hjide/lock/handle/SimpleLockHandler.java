@@ -4,7 +4,6 @@ package com.hjide.lock.handle;
  * 简单的锁执行方式，
  * 把锁的key通过构造方法传递
  * <p/>
- * Created by xuxianjun on 2015/7/8.
  */
 public abstract class SimpleLockHandler<T> implements LockHandler<T>
 {

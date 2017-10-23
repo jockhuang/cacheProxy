@@ -6,9 +6,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by xuxianjun on 2016/1/20.
- */
 public class MapType extends Type<Map>
 {
 

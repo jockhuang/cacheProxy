@@ -20,10 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 对象转换关系
  * <p/>
- * User: xuxianjun
- * Date: 14-5-9
- * Time: 上午11:19
- * To change this template use File | Settings | File Templates.
  */
 public class SerializeBean
 {

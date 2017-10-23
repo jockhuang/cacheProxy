@@ -1,21 +1,28 @@
 package com.hjide.cache.client;
 
-import com.hjide.cache.common.CacheTuple;
-import com.lambdaworks.redis.*;
+import com.hjide.cache.common.ScoredValue;
+import com.lambdaworks.redis.Limit;
+import com.lambdaworks.redis.Range;
+import com.lambdaworks.redis.RedisClient;
+import com.lambdaworks.redis.SetArgs;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
 import com.lambdaworks.redis.codec.ByteArrayCodec;
 
-import java.io.*;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
  * cache com.hjide.cache.client
  * Created by jock on 2017/10/17.
  */
-public class RedisLettuceClientImpl implements CacheClientProxy
+public class RedisLettuceClientImpl extends AbstractCacheClient
 {
+
     RedisClient client = RedisClient.create("redis://localhost");
 
     StatefulRedisConnection<String, String> connection = client.connect();
@@ -25,6 +32,26 @@ public class RedisLettuceClientImpl implements CacheClientProxy
     RedisCommands<String, String> commands = connection.sync();
 
     RedisCommands<byte[], byte[]> bytecommands = connection2.sync();
+
+    public RedisCommands<String, String> getCommands()
+    {
+        return commands;
+    }
+
+    public void setCommands(RedisCommands<String, String> commands)
+    {
+        this.commands = commands;
+    }
+
+    public RedisCommands<byte[], byte[]> getBytecommands()
+    {
+        return bytecommands;
+    }
+
+    public void setBytecommands(RedisCommands<byte[], byte[]> bytecommands)
+    {
+        this.bytecommands = bytecommands;
+    }
 
     @Override
     public Long del(String key)
@@ -417,28 +444,29 @@ public class RedisLettuceClientImpl implements CacheClientProxy
         return set;
     }
 
-    @Override
-    public Set<CacheTuple> zrangeWithScores(String key, long begin, long end)
+    private Set<ScoredValue> convertTuple(List<com.lambdaworks.redis.ScoredValue<String>>  returnSet)
     {
-        List<ScoredValue<String>> list = commands.zrangeWithScores(key, begin, end);
-        Set<CacheTuple> set = new HashSet<CacheTuple>();
-        for (ScoredValue<String> stringScoredValue : list)
+        Set<ScoredValue> tupleSet = new HashSet<>();
+        for (com.lambdaworks.redis.ScoredValue<String> stringScoredValue : returnSet)
         {
-            set.add(new CacheTuple(stringScoredValue.value, stringScoredValue.score));
+            tupleSet.add(new ScoredValue(stringScoredValue.value, stringScoredValue.score));
         }
-        return set;
+        return tupleSet;
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeWithScores(String key, long min, long max)
+    public Set<ScoredValue> zrangeWithScores(String key, long begin, long end)
     {
-        List<ScoredValue<String>> list = commands.zrevrangeWithScores(key, min, max);
-        Set<CacheTuple> set = new HashSet<CacheTuple>();
-        for (ScoredValue<String> stringScoredValue : list)
-        {
-            set.add(new CacheTuple(stringScoredValue.value, stringScoredValue.score));
-        }
-        return set;
+        List<com.lambdaworks.redis.ScoredValue<String>> list = commands.zrangeWithScores(key, begin, end);
+
+        return convertTuple(list);
+    }
+
+    @Override
+    public Set<ScoredValue> zrevrangeWithScores(String key, long min, long max)
+    {
+        List<com.lambdaworks.redis.ScoredValue<String>> list = commands.zrevrangeWithScores(key, min, max);
+        return convertTuple(list);
     }
 
     @Override
@@ -492,53 +520,33 @@ public class RedisLettuceClientImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max)
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max)
     {
-        List<ScoredValue<String>> list = commands.zrangebyscoreWithScores(key, Range.create(min, max));
-        Set<CacheTuple> set = new HashSet<CacheTuple>();
-        for (ScoredValue<String> stringScoredValue : list)
-        {
-            set.add(new CacheTuple(stringScoredValue.value, stringScoredValue.score));
-        }
-        return set;
+        List<com.lambdaworks.redis.ScoredValue<String>> list = commands.zrangebyscoreWithScores(key, Range.create(min, max));
+        return convertTuple(list);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max)
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max)
     {
-        List<ScoredValue<String>> list = commands.zrevrangebyscoreWithScores(key, Range.create(min, max));
-        Set<CacheTuple> set = new HashSet<CacheTuple>();
-        for (ScoredValue<String> stringScoredValue : list)
-        {
-            set.add(new CacheTuple(stringScoredValue.value, stringScoredValue.score));
-        }
-        return set;
+        List<com.lambdaworks.redis.ScoredValue<String>> list = commands.zrevrangebyscoreWithScores(key, Range.create(min, max));
+        return convertTuple(list);
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max, int offset, int count)
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max, int offset, int count)
     {
-        List<ScoredValue<String>> list =
+        List<com.lambdaworks.redis.ScoredValue<String>> list =
             commands.zrangebyscoreWithScores(key, Range.create(min, max), Limit.create(offset, count));
-        Set<CacheTuple> set = new HashSet<CacheTuple>();
-        for (ScoredValue<String> stringScoredValue : list)
-        {
-            set.add(new CacheTuple(stringScoredValue.value, stringScoredValue.score));
-        }
-        return set;
+        return convertTuple(list);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count)
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count)
     {
-        List<ScoredValue<String>> list =
+        List<com.lambdaworks.redis.ScoredValue<String>> list =
             commands.zrevrangebyscoreWithScores(key, Range.create(min, max), Limit.create(offset, count));
-        Set<CacheTuple> set = new HashSet<CacheTuple>();
-        for (ScoredValue<String> stringScoredValue : list)
-        {
-            set.add(new CacheTuple(stringScoredValue.value, stringScoredValue.score));
-        }
-        return set;
+        return convertTuple(list);
     }
 
     @Override
@@ -547,75 +555,5 @@ public class RedisLettuceClientImpl implements CacheClientProxy
         return commands.zremrangebyscore(key, Range.create(min, max));
     }
 
-    /**
-     * 对象转数组
-     *
-     * @param obj Object
-     * @return byte[]
-     */
-    private byte[] toByteArray(Object obj)
-        throws IOException
-    {
-        byte[] bytes = null;
-        ByteArrayOutputStream bos = null;
-        ObjectOutputStream oos = null;
-        try
-        {
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.flush();
-            bytes = bos.toByteArray();
 
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            if (bos != null)
-                bos.close();
-            if (oos != null)
-                oos.close();
-        }
-        return bytes;
-    }
-
-    /**
-     * 数组转对象
-     *
-     * @param bytes byte[]
-     * @return Object
-     */
-    private Object toObject(byte[] bytes)
-        throws IOException
-    {
-        Object obj = null;
-        ByteArrayInputStream bis = null;
-        ObjectInputStream ois = null;
-        try
-        {
-            bis = new ByteArrayInputStream(bytes);
-            ois = new ObjectInputStream(bis);
-            obj = ois.readObject();
-
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-        catch (ClassNotFoundException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            if (ois != null)
-                ois.close();
-            if (bis != null)
-                bis.close();
-        }
-        return obj;
-    }
 }

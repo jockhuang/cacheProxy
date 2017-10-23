@@ -3,9 +3,6 @@ package com.hjide.cache.proxy;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by xuxianjun on 2016/1/12.
- */
 public interface HashCacheProxy
 {
 

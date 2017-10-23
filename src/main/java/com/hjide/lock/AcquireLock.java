@@ -8,10 +8,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 获取锁
  * <p/>
- * User: xuxianjun
- * Date: 14-11-20
- * Time: 下午3:14
- * To change this template use File | Settings | File Templates.
  */
 public interface AcquireLock<K>
 {

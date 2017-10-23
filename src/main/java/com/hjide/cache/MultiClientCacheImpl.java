@@ -1,6 +1,6 @@
 package com.hjide.cache;
 
-import com.hjide.cache.common.CacheTuple;
+import com.hjide.cache.common.ScoredValue;
 import com.hjide.cache.enums.ErrorCode;
 import com.hjide.cache.exception.CacheException;
 import org.apache.commons.collections.MapUtils;
@@ -16,9 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by jock on 15/12/31.
- */
 public class MultiClientCacheImpl implements CacheProxy, InitializingBean
 {
 
@@ -703,13 +700,13 @@ public class MultiClientCacheImpl implements CacheProxy, InitializingBean
     }
 
     @Override
-    public Set<CacheTuple> zrangeWithScores(String key, long begin, long end)
+    public Set<ScoredValue> zrangeWithScores(String key, long begin, long end)
     {
         return getMasterClient().zrangeWithScores(key, begin, end);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeWithScores(String key, long min, long max)
+    public Set<ScoredValue> zrevrangeWithScores(String key, long min, long max)
     {
         return getMasterClient().zrevrangeWithScores(key, min, max);
     }
@@ -757,25 +754,25 @@ public class MultiClientCacheImpl implements CacheProxy, InitializingBean
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max)
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max)
     {
         return getMasterClient().zrangeByScoreWithScores(key, min, max);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max)
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max)
     {
         return getMasterClient().zrevrangeByScoreWithScores(key, min, max);
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max, int offset, int count)
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max, int offset, int count)
     {
         return getMasterClient().zrangeByScoreWithScores(key, min, max, offset, count);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count)
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count)
     {
         return getMasterClient().zrevrangeByScoreWithScores(key, min, max, offset, count);
     }

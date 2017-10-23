@@ -8,13 +8,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created with IntelliJ IDEA.
- * User: xuxianjun
- * Date: 15-1-29
- * Time: 下午8:40
- * To change this template use File | Settings | File Templates.
- */
 public class RedisAcquireLock implements AcquireLock<String>
 {
 

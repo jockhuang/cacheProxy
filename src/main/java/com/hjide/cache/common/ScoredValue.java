@@ -1,16 +1,14 @@
 package com.hjide.cache.common;
 
-/**
- * Created by xuxianjun on 2016/1/12.
- */
-public class CacheTuple implements Comparable<CacheTuple>
+
+public class ScoredValue implements Comparable<ScoredValue>
 {
 
     private final String value;
 
     private final Double score;
 
-    public CacheTuple(String value, Double score)
+    public ScoredValue(String value, Double score)
     {
         this.value = value;
         this.score = score;
@@ -44,13 +42,13 @@ public class CacheTuple implements Comparable<CacheTuple>
         {
             return false;
         }
-        else if (!(obj instanceof CacheTuple))
+        else if (!(obj instanceof ScoredValue))
         {
             return false;
         }
         else
         {
-            CacheTuple other = (CacheTuple)obj;
+            ScoredValue other = (ScoredValue)obj;
             if (this.score == null)
             {
                 if (other.score != null)
@@ -86,7 +84,7 @@ public class CacheTuple implements Comparable<CacheTuple>
         return Double.compare(thisScore, otherScore);
     }
 
-    public int compareTo(CacheTuple o)
+    public int compareTo(ScoredValue o)
     {
         return o == null ? this.compareTo((Double)Double.valueOf(0.0D)) : this.compareTo((Double)o.getScore());
     }

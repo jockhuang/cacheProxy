@@ -1,6 +1,11 @@
 package com.hjide.cache;
 
-import com.hjide.cache.proxy.*;
+import com.hjide.cache.proxy.HashCacheProxy;
+import com.hjide.cache.proxy.ListCacheProxy;
+import com.hjide.cache.proxy.ObjectCacheProxy;
+import com.hjide.cache.proxy.SetCacheProxy;
+import com.hjide.cache.proxy.StringCacheProxy;
+import com.hjide.cache.proxy.ZSortCacheProxy;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

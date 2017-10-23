@@ -12,8 +12,8 @@ public class CacheNamespaceHandler extends NamespaceHandlerSupport
     public void init()
     {
         //自定义标签中的element标签名为client解析注册使用RedisCacheDefinitionParser进行.
-        registerBeanDefinitionParser("redis", new RedisCacheDefinitionParser());
-//        registerBeanDefinitionParser("memcached", new RedisCacheDefinitionParser());
+        registerBeanDefinitionParser("jedis", new JedisCacheDefinitionParser());
+        registerBeanDefinitionParser("lettuce", new LettuceCacheDefinitionParser());
         registerBeanDefinitionParser("lock", new LockCacheDefinitionParser());
     }
 }

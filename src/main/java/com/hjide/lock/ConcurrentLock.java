@@ -8,9 +8,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 并发锁
  * <p/>
- * User: xuxianjun
- * Date: 14-11-20
- * Time: 下午2:36
  */
 public interface ConcurrentLock<T, K>
 {

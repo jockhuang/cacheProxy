@@ -1,20 +1,19 @@
 package com.hjide.cache.client;
 
-import com.hjide.cache.common.CacheTuple;
+import com.hjide.cache.common.ScoredValue;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Tuple;
 
-import java.io.*;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-/**
- * author: yanghua.yi
- * date: 2015/1/13
- * time: 18:32
- */
-public class RedisCacheCloudImpl implements CacheClientProxy
+
+public class RedisCacheCloudImpl extends AbstractCacheClient
 {
     private JedisPool jedisPool;
 
@@ -33,6 +32,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     {
         Jedis jedis = jedisPool.getResource();
         jedis.set(key, value);
+        jedis.close();
     }
 
     @Override
@@ -239,7 +239,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrangeWithScores(String key, long begin, long end)
+    public Set<ScoredValue> zrangeWithScores(String key, long begin, long end)
     {
         Jedis jdRedisClient = getJdRedisClient().getResource();
         Set<Tuple> returnSet = jdRedisClient.zrangeWithScores(key, begin, end);
@@ -247,19 +247,19 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeWithScores(String key, long min, long max)
+    public Set<ScoredValue> zrevrangeWithScores(String key, long min, long max)
     {
         Jedis jedis = getJdRedisClient().getResource();
         Set<Tuple> returnSet = jedis.zrevrangeWithScores(key, min, max);
         return convertTuple(returnSet);
     }
 
-    private Set<CacheTuple> convertTuple(Set<Tuple> returnSet)
+    private Set<ScoredValue> convertTuple(Set<Tuple> returnSet)
     {
-        Set<CacheTuple> tupleSet = new HashSet<CacheTuple>();
+        Set<ScoredValue> tupleSet = new HashSet<ScoredValue>();
         for (Tuple stringTuple : returnSet)
         {
-            tupleSet.add(new CacheTuple(stringTuple.getElement(), stringTuple.getScore()));
+            tupleSet.add(new ScoredValue(stringTuple.getElement(), stringTuple.getScore()));
         }
         return tupleSet;
     }
@@ -314,7 +314,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max)
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max)
     {
         Jedis jdRedisClient = getJdRedisClient().getResource();
         Set<Tuple> tupleSet = jdRedisClient.zrangeByScoreWithScores(key, min, max);
@@ -322,7 +322,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max)
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max)
     {
         Jedis jdRedisClient = getJdRedisClient().getResource();
         Set<Tuple> tupleSet = jdRedisClient.zrevrangeByScoreWithScores(key, min, max);
@@ -330,7 +330,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max, int offset, int count)
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max, int offset, int count)
     {
         Jedis jdRedisClient = getJdRedisClient().getResource();
         Set<Tuple> tupleSet = jdRedisClient.zrangeByScoreWithScores(key, min, max, offset, count);
@@ -338,7 +338,7 @@ public class RedisCacheCloudImpl implements CacheClientProxy
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count)
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count)
     {
         Jedis jdRedisClient = getJdRedisClient().getResource();
         Set<Tuple> tupleSet = jdRedisClient.zrevrangeByScoreWithScores(key, min, max, offset, count);
@@ -613,75 +613,5 @@ public class RedisCacheCloudImpl implements CacheClientProxy
         return jdRedisClient.lrem(key, count, value);
     }
 
-    /**
-     * 对象转数组
-     *
-     * @param obj Object
-     * @return byte[]
-     */
-    private byte[] toByteArray(Object obj)
-        throws IOException
-    {
-        byte[] bytes = null;
-        ByteArrayOutputStream bos = null;
-        ObjectOutputStream oos = null;
-        try
-        {
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.flush();
-            bytes = bos.toByteArray();
 
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            if (bos != null)
-                bos.close();
-            if (oos != null)
-                oos.close();
-        }
-        return bytes;
-    }
-
-    /**
-     * 数组转对象
-     *
-     * @param bytes byte[]
-     * @return Object
-     */
-    private Object toObject(byte[] bytes)
-        throws IOException
-    {
-        Object obj = null;
-        ByteArrayInputStream bis = null;
-        ObjectInputStream ois = null;
-        try
-        {
-            bis = new ByteArrayInputStream(bytes);
-            ois = new ObjectInputStream(bis);
-            obj = ois.readObject();
-
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-        catch (ClassNotFoundException ex)
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            if (ois != null)
-                ois.close();
-            if (bis != null)
-                bis.close();
-        }
-        return obj;
-    }
 }

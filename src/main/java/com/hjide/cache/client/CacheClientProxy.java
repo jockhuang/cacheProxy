@@ -1,6 +1,6 @@
 package com.hjide.cache.client;
 
-import com.hjide.cache.common.CacheTuple;
+import com.hjide.cache.common.ScoredValue;
 
 import java.util.Date;
 import java.util.List;
@@ -142,9 +142,9 @@ public interface CacheClientProxy
 
     Set<String> zrevrange(String key, long begin, long end);
 
-    Set<CacheTuple> zrangeWithScores(String key, long begin, long end);
+    Set<ScoredValue> zrangeWithScores(String key, long begin, long end);
 
-    Set<CacheTuple> zrevrangeWithScores(String key, long min, long max);
+    Set<ScoredValue> zrevrangeWithScores(String key, long min, long max);
 
     Long zcard(String key);
 
@@ -160,13 +160,13 @@ public interface CacheClientProxy
 
     Set<String> zrevrangeByScore(String key, double min, double max, int offset, int count);
 
-    Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max);
+    Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max);
 
-    Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max);
+    Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max);
 
-    Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max, int offset, int count);
+    Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max, int offset, int count);
 
-    Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count);
+    Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count);
 
     Long zremrangeByScore(String key, double min, double max);
 

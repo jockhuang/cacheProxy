@@ -2,9 +2,6 @@ package com.hjide.cache;
 
 import com.hjide.cache.client.CacheClientProxy;
 
-/**
- * Created by jock on 15/12/24.
- */
 public class DefaultCacheImpl extends AbstractCacheImpl
 {
 

@@ -10,10 +10,6 @@ import com.hjide.lock.redis.RedisAcquireLock;
  * <p/>
  * 用于获取锁失败后，
  * <p/>
- * User: xuxianjun
- * Date: 14-11-20
- * Time: 下午4:11
- * To change this template use File | Settings | File Templates.
  */
 public interface RejectedLockHandler
 {

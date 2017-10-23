@@ -1,7 +1,7 @@
 package com.hjide.cache.proxy.impl;
 
 import com.hjide.cache.proxy.ZSortCacheProxy;
-import com.hjide.cache.common.CacheTuple;
+import com.hjide.cache.common.ScoredValue;
 
 import java.util.Map;
 import java.util.Set;
@@ -52,12 +52,12 @@ public  class DefaultZSortCacheProxy extends BaseCacheProxyImpl implements ZSort
     }
 
     @Override
-    public Set<CacheTuple> zrangeWithScores(String key, long begin, long end) {
+    public Set<ScoredValue> zrangeWithScores(String key, long begin, long end) {
         return getClientProxy().zrangeWithScores(key,begin,end);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeWithScores(String key, long min, long max) {
+    public Set<ScoredValue> zrevrangeWithScores(String key, long min, long max) {
         return getClientProxy().zrevrangeWithScores(key,min, max);
     }
 
@@ -97,22 +97,22 @@ public  class DefaultZSortCacheProxy extends BaseCacheProxyImpl implements ZSort
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max) {
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max) {
         return getClientProxy().zrangeByScoreWithScores(key,min,max);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max) {
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max) {
         return getClientProxy().zrevrangeByScoreWithScores(key,min,max);
     }
 
     @Override
-    public Set<CacheTuple> zrangeByScoreWithScores(String key, double min, double max,int offset, int count) {
+    public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max,int offset, int count) {
         return getClientProxy().zrangeByScoreWithScores(key,min,max,offset,count);
     }
 
     @Override
-    public Set<CacheTuple> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count) {
+    public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max, int offset, int count) {
         return getClientProxy().zrevrangeByScoreWithScores(key,min,max,offset,count);
     }
 

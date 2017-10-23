@@ -5,9 +5,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.List;
 
-/**
- * Created by xuxianjun on 2016/1/20.
- */
 public class ListType extends Type<List>
 {
 
