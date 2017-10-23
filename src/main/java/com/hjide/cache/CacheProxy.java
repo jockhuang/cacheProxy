@@ -10,11 +10,6 @@ import com.hjide.cache.proxy.ZSortCacheProxy;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-/**
- * author: yanghua.yi
- * date: 2015/1/9
- * time: 17:07
- */
 public interface CacheProxy extends
     StringCacheProxy, HashCacheProxy, ListCacheProxy, ObjectCacheProxy, SetCacheProxy, ZSortCacheProxy
 {

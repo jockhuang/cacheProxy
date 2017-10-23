@@ -10,10 +10,6 @@ import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-/**
- * cache com.hjide.cache.spring
- * Created by jock on 2017/10/23.
- */
 public class LettuceCacheDefinitionParser extends AbstractSimpleBeanDefinitionParser
 {
     @Override

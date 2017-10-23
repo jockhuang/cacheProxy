@@ -10,9 +10,6 @@ import org.w3c.dom.Element;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-/**
- * Created by jock on 15/12/24.
- */
 public class JedisCacheDefinitionParser extends AbstractSimpleBeanDefinitionParser
 {
 

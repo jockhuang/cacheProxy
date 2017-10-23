@@ -2,9 +2,6 @@ package com.hjide.cache.spring;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-/**
- * Created by jock on 15/12/24.
- */
 public class CacheNamespaceHandler extends NamespaceHandlerSupport
 {
 

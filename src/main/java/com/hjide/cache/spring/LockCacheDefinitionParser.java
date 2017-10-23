@@ -8,9 +8,6 @@ import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-/**
- * Created by xuxianjun on 2016/1/25.
- */
 public class LockCacheDefinitionParser extends AbstractSimpleBeanDefinitionParser
 {
 
