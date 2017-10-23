@@ -34,7 +34,6 @@ public class LettuceCacheDefinitionParser extends AbstractSimpleBeanDefinitionPa
         String port = element.getAttribute("port");
         String password = element.getAttribute("password");
         String timeout = element.getAttribute("timeout");
-//        builder.addPropertyValue("host", host);
 //        builder.addPropertyValue("port", port);
         builder.setInitMethodName("sync");
 
