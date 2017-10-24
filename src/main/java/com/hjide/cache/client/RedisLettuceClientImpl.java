@@ -8,12 +8,9 @@ import com.lambdaworks.redis.SetArgs;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
 import com.lambdaworks.redis.codec.ByteArrayCodec;
+import com.lambdaworks.redis.support.RedisClientFactoryBean;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,34 +20,30 @@ import java.util.concurrent.TimeUnit;
 public class RedisLettuceClientImpl extends AbstractCacheClient
 {
 
-    RedisClient client = RedisClient.create("redis://localhost");
+//    private RedisClientFactoryBean redisClientFactoryBean;
 
-    StatefulRedisConnection<String, String> connection = client.connect();
+    private RedisClient client; //redisClientFactoryBean.getObject();
 
-    StatefulRedisConnection<byte[], byte[]> connection2 = client.connect(new ByteArrayCodec());
+    private StatefulRedisConnection<String, String> connection;
 
-    RedisCommands<String, String> commands = connection.sync();
+    private StatefulRedisConnection<byte[], byte[]> connection2 ;
 
-    RedisCommands<byte[], byte[]> bytecommands = connection2.sync();
+    private RedisCommands<String, String> commands ;
 
-    public RedisCommands<String, String> getCommands()
+    private RedisCommands<byte[], byte[]> bytecommands ;
+
+    public void setClient(RedisClient client)
     {
-        return commands;
-    }
 
-    public void setCommands(RedisCommands<String, String> commands)
-    {
-        this.commands = commands;
-    }
+        this.client = client;
+        connection = client.connect();
 
-    public RedisCommands<byte[], byte[]> getBytecommands()
-    {
-        return bytecommands;
-    }
+        connection2 = client.connect(new ByteArrayCodec());
 
-    public void setBytecommands(RedisCommands<byte[], byte[]> bytecommands)
-    {
-        this.bytecommands = bytecommands;
+        commands = connection.sync();
+
+        bytecommands = connection2.sync();
+
     }
 
     @Override
@@ -444,7 +437,7 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
         return set;
     }
 
-    private Set<ScoredValue> convertTuple(List<com.lambdaworks.redis.ScoredValue<String>>  returnSet)
+    private Set<ScoredValue> convertTuple(List<com.lambdaworks.redis.ScoredValue<String>> returnSet)
     {
         Set<ScoredValue> tupleSet = new HashSet<>();
         for (com.lambdaworks.redis.ScoredValue<String> stringScoredValue : returnSet)
@@ -522,14 +515,16 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
     @Override
     public Set<ScoredValue> zrangeByScoreWithScores(String key, double min, double max)
     {
-        List<com.lambdaworks.redis.ScoredValue<String>> list = commands.zrangebyscoreWithScores(key, Range.create(min, max));
+        List<com.lambdaworks.redis.ScoredValue<String>> list =
+            commands.zrangebyscoreWithScores(key, Range.create(min, max));
         return convertTuple(list);
     }
 
     @Override
     public Set<ScoredValue> zrevrangeByScoreWithScores(String key, double min, double max)
     {
-        List<com.lambdaworks.redis.ScoredValue<String>> list = commands.zrevrangebyscoreWithScores(key, Range.create(min, max));
+        List<com.lambdaworks.redis.ScoredValue<String>> list =
+            commands.zrevrangebyscoreWithScores(key, Range.create(min, max));
         return convertTuple(list);
     }
 
@@ -554,6 +549,5 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
     {
         return commands.zremrangebyscore(key, Range.create(min, max));
     }
-
 
 }

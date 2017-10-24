@@ -2,8 +2,10 @@ package com.hjide.cache.spring;
 
 import com.hjide.cache.DefaultCacheImpl;
 import com.hjide.cache.client.RedisLettuceClientImpl;
+import com.lambdaworks.redis.RedisURI;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
+import com.lambdaworks.redis.support.RedisClientFactoryBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
@@ -21,28 +23,30 @@ public class LettuceCacheDefinitionParser extends AbstractSimpleBeanDefinitionPa
     private BeanDefinition createLettuceProxyBeanDefinition(Element element)
     {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(RedisLettuceClientImpl.class);
-        builder.addPropertyValue("commands", createRedisCommandBeanDefinition(element));
+        builder.addPropertyValue("client", createRedisClientFactoryBeanDefinition(element));
 
         return builder.getBeanDefinition();
     }
 
-    private BeanDefinition createRedisCommandBeanDefinition(Element element)
+    private BeanDefinition createRedisClientFactoryBeanDefinition(Element element)
     {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(RedisCommands.class);
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(RedisClientFactoryBean.class);
         // 从标签中取出对应的属性值
-        String host = element.getAttribute("host");
-        String port = element.getAttribute("port");
+
         String password = element.getAttribute("password");
         String timeout = element.getAttribute("timeout");
-//        builder.addPropertyValue("port", port);
-        builder.setInitMethodName("sync");
+        builder.addPropertyValue("redisURI",createRedisURIBeanDefinition(element));
 
 
         return builder.getBeanDefinition();
     }
 
-    private BeanDefinition createRedisConnectionBeanDefinition(Element element){
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(StatefulRedisConnection.class);
+    private BeanDefinition createRedisURIBeanDefinition(Element element){
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(RedisURI.class);
+        String host = element.getAttribute("host");
+        String port = element.getAttribute("port");
+        builder.addPropertyValue("host",host);
+        builder.addPropertyValue("port",port);
         return builder.getBeanDefinition();
     }
 
