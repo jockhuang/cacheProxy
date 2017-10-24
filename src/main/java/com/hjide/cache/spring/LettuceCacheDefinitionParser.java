@@ -3,8 +3,6 @@ package com.hjide.cache.spring;
 import com.hjide.cache.DefaultCacheImpl;
 import com.hjide.cache.client.RedisLettuceClientImpl;
 import com.lambdaworks.redis.RedisURI;
-import com.lambdaworks.redis.api.StatefulRedisConnection;
-import com.lambdaworks.redis.api.sync.RedisCommands;
 import com.lambdaworks.redis.support.RedisClientFactoryBean;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -35,18 +33,18 @@ public class LettuceCacheDefinitionParser extends AbstractSimpleBeanDefinitionPa
 
         String password = element.getAttribute("password");
         String timeout = element.getAttribute("timeout");
-        builder.addPropertyValue("redisURI",createRedisURIBeanDefinition(element));
-
+        builder.addPropertyValue("redisURI", createRedisURIBeanDefinition(element));
 
         return builder.getBeanDefinition();
     }
 
-    private BeanDefinition createRedisURIBeanDefinition(Element element){
+    private BeanDefinition createRedisURIBeanDefinition(Element element)
+    {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(RedisURI.class);
         String host = element.getAttribute("host");
         String port = element.getAttribute("port");
-        builder.addPropertyValue("host",host);
-        builder.addPropertyValue("port",port);
+        builder.addPropertyValue("host", host);
+        builder.addPropertyValue("port", port);
         return builder.getBeanDefinition();
     }
 

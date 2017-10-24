@@ -1,6 +1,5 @@
 package com.hjide.cache.common;
 
-
 public class ScoredValue implements Comparable<ScoredValue>
 {
 

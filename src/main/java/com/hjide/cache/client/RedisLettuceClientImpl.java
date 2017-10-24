@@ -8,18 +8,23 @@ import com.lambdaworks.redis.SetArgs;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
 import com.lambdaworks.redis.codec.ByteArrayCodec;
+import lombok.NonNull;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class RedisLettuceClientImpl extends AbstractCacheClient
 {
 
-    private RedisCommands<String, String> commands ;
+    private RedisCommands<String, String> commands;
 
     private RedisCommands<byte[], byte[]> byteCommands;
 
-    public void setClient(RedisClient client)
+    public void setClient(@NonNull RedisClient client)
     {
 
         StatefulRedisConnection<String, String> connection = client.connect();

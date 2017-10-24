@@ -81,9 +81,9 @@ public interface CacheClientProxy
 
     String rpop(String key);
 
-    Long lpushx(String key, String ...value);
+    Long lpushx(String key, String... value);
 
-    Long rpushx(String key, String ...value);
+    Long rpushx(String key, String... value);
 
     //map方法
     boolean hset(String key, String field, String value);
