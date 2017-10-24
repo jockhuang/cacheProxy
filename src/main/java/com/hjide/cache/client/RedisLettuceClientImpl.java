@@ -8,41 +8,27 @@ import com.lambdaworks.redis.SetArgs;
 import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
 import com.lambdaworks.redis.codec.ByteArrayCodec;
-import com.lambdaworks.redis.support.RedisClientFactoryBean;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * cache com.hjide.cache.client
- * Created by jock on 2017/10/17.
- */
 public class RedisLettuceClientImpl extends AbstractCacheClient
 {
 
-//    private RedisClientFactoryBean redisClientFactoryBean;
-
-    private RedisClient client; //redisClientFactoryBean.getObject();
-
-    private StatefulRedisConnection<String, String> connection;
-
-    private StatefulRedisConnection<byte[], byte[]> connection2 ;
-
     private RedisCommands<String, String> commands ;
 
-    private RedisCommands<byte[], byte[]> bytecommands ;
+    private RedisCommands<byte[], byte[]> byteCommands;
 
     public void setClient(RedisClient client)
     {
 
-        this.client = client;
-        connection = client.connect();
+        StatefulRedisConnection<String, String> connection = client.connect();
 
-        connection2 = client.connect(new ByteArrayCodec());
+        StatefulRedisConnection<byte[], byte[]> connection2 = client.connect(new ByteArrayCodec());
 
         commands = connection.sync();
 
-        bytecommands = connection2.sync();
+        byteCommands = connection2.sync();
 
     }
 
@@ -79,7 +65,7 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
     @Override
     public String type(byte[] key)
     {
-        return bytecommands.type(key);
+        return byteCommands.type(key);
     }
 
     @Override
@@ -156,7 +142,7 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
     {
         try
         {
-            byte[] data = bytecommands.get(key.getBytes());
+            byte[] data = byteCommands.get(key.getBytes());
             if (data == null)
                 return null;
             else
@@ -173,7 +159,7 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
     {
         try
         {
-            bytecommands.set(key.getBytes(), toByteArray(value));
+            byteCommands.set(key.getBytes(), toByteArray(value));
         }
         catch (Exception ex)
         {
@@ -186,9 +172,9 @@ public class RedisLettuceClientImpl extends AbstractCacheClient
     {
         try
         {
-            bytecommands.del(key.getBytes());
+            byteCommands.del(key.getBytes());
             //todo
-            // bytecommands.set(key.getBytes(), toByteArray(value),"nx".getBytes(),"px".getBytes(),unit.toMillis(expiredTime));
+            // byteCommands.set(key.getBytes(), toByteArray(value),"nx".getBytes(),"px".getBytes(),unit.toMillis(expiredTime));
         }
         catch (Exception ex)
         {
