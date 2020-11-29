@@ -209,8 +209,7 @@ public class SerializeBean
             }
             try
             {
-                Object value = type.
-                    getValue(fieldMap.get(serializeName));
+                Object value = type.getValue(fieldMap.get(serializeName));
                 if (value == null)
                 {
                     return;

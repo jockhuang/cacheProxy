@@ -1,5 +1,7 @@
 package com.hjide.cache.serialize;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.hjide.cache.utils.SerializeBean;
 import org.junit.Test;
 
@@ -24,6 +26,8 @@ public class SerializeBeanTest {
 
     @Test
     public void serialize(){
+        ParserConfig.getGlobalInstance().addAccept("com.hjide.");
+        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         CategoryDTO dto = new CategoryDTO();
         dto.setVersion(System.currentTimeMillis());
         dto.setFid(1L);
@@ -55,10 +59,23 @@ public class SerializeBeanTest {
 
         Map<String,String> map =SerializeBean.serializeObj(dto);
         System.out.println(map);
+        System.out.println("json=");
+        String json = JSON.toJSONString(dto);
+        System.out.println(json);
+        CategoryDTO bean2 = JSON.parseObject(json,CategoryDTO.class);
+        System.out.println(bean2);
 
         CategoryDTO bean = new CategoryDTO();
         SerializeBean.deserialization(bean,map);
 
         System.out.println(bean);
+    }
+
+    @Test
+    public void listTest(){
+        ParserConfig.getGlobalInstance().addAccept("com.hjide.");
+        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+        String json = "[{\"@type\":\"com.hjide.cache.serialize.CategoryAttrDTO\",\"id\":1,\"key\":\"CATEGOTY_1\",\"name\":\"1\"},{\"@type\":\"com.hjide.cache.serialize.CategoryAttrDTO\",\"id\":2,\"key\":\"CATEGOTY_2\",\"name\":\"2\"},{\"@type\":\"com.hjide.cache.serialize.CategoryAttrDTO\",\"id\":3,\"key\":\"CATEGOTY_3\",\"name\":\"3\"}]";
+        System.out.println(JSON.parseObject(json,List.class));
     }
 }
